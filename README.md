@@ -84,11 +84,26 @@ docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest
   - Port Mapping: 8080
 - Define environment variables:
   - SPORTS_API_KEY: <YOUR_SPORTSDATA.IO_API_KEY>
-3. Run the Service:
+3. Run the Service with an ALB
 - Go to Clusters → Create Service.
 - Launch type: Fargate.
-- Assign subnets and a security group that allows inbound traffic on port 8080.
-
+- Load Balancer: Select Application Load Balancer (ALB).
+- ALB Configuration:
+ - Create a new ALB:
+ - Name: sports-api-alb.
+ - Scheme: Internet-facing.
+ - Attach it to the same VPC and subnets as your ECS service.
+- Create a Target Group:
+  - Target Type: IP (for Fargate).
+  - Port: 8080 (to match your container).
+  - Register your ECS tasks in the target group.
+- Security Group:
+  - Allow inbound traffic on port 80 (for HTTP) and/or port 443 (for HTTPS if using SSL).
+- Set Auto Scaling (Optional):
+  - Configure ECS to scale tasks based on metrics like CPU or memory usage.
+4. Test the ALB:
+- After deploying the ECS service, note the DNS name of the ALB (e.g., sports-api-alb-<AWS_ACCOUNT_ID>.us-east-1.elb.amazonaws.com).
+- Confirm the API is accessible by visiting the ALB DNS name in your browser
 
 ### **Configure API Gateway**
 1. Create a New REST API:
@@ -99,7 +114,7 @@ docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest
 - Create a resource /sports.
 - Create a GET method.
 - Choose HTTP Proxy as the integration type.
-- Enter the public URL of your ECS service (ALB or Fargate IP).
+- Enter the DNS name of the ALB (ALB's public URL) of your ECS service.
 
 3. Deploy the API:
 - Deploy the API to a stage (e.g., prod).
@@ -110,13 +125,10 @@ docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest
 ```bash
 curl https://<api-gateway-id>.execute-api.us-east-1.amazonaws.com/prod/sports
 ```
-- Monitor logs in CloudWatch Logs for both API Gateway and ECS tasks.
-
 
 ### **What We Learned**
 Setting up a scalable, containerized application with ECS.
-Managing APIs securely and efficiently using API Gateway.
-Monitoring and debugging with CloudWatch Logs.
+Creating public APIs using API Gateway.
 
 ### **Future Enhancements**
 Add caching for frequent API requests using Amazon ElastiCache.
