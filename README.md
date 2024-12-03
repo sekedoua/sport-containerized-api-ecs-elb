@@ -85,7 +85,7 @@ docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest
 - Assign subnets and a security group that allows inbound traffic on port 8080.
 
 
-### Configure API Gateway**
+### Configure API Gateway
 1. Create a New REST API:
 - Go to API Gateway Console → Create API → REST API.
 - Name the API (e.g., Sports API Gateway).
