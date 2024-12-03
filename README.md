@@ -52,13 +52,13 @@ sports-api-management/
 
 ## **Setup Instructions**
 
-### Clone the Repository**
+### **Clone the Repository**
 ```bash
 git clone https://github.com/ifeanyiro9/containerized-sports-api.git
 cd containerized-sports-api
 ```
 
-### Build and Push the Docker Image**
+### **Build and Push the Docker Image**
 ```bash
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com
 
