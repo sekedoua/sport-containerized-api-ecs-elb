@@ -58,7 +58,7 @@ sports-api-management/
 git clone https://github.com/ifeanyiro9/containerized-sports-api.git
 cd containerized-sports-api
 ```
-### **Create ECR Repo***
+### **Create ECR Repo**
 ```bash
 aws ecr create-repository --repository-name sports-api --region us-east-1
 ```
