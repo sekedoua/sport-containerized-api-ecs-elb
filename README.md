@@ -76,11 +76,47 @@ docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest
 - Go to Task Definitions → Create New Task Definition → Fargate.
 - Add the container:
   - Image: <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest.
-  - Port Mapping: 8080.
+  - Port Mapping: 8080
 - Define environment variables:
   - SPORTS_API_KEY: "Your Sports API key".
 3. Run the Service:
 - Go to Clusters → Create Service.
 - Launch type: Fargate.
 - Assign subnets and a security group that allows inbound traffic on port 8080.
+
+
+### Configure API Gateway**
+1. Create a New REST API:
+- Go to API Gateway Console → Create API → REST API.
+- Name the API (e.g., Sports API Gateway).
+
+2. Set Up Integration:
+- Create a resource /sports.
+- Create a GET method.
+- Choose HTTP Proxy as the integration type.
+- Enter the public URL of your ECS service (ALB or Fargate IP).
+
+3. Deploy the API:
+- Deploy the API to a stage (e.g., prod).
+- Note the endpoint URL.
+
+### Test the System**
+- Use curl or a browser to test:
+```bash
+curl https://<api-gateway-id>.execute-api.us-east-1.amazonaws.com/prod/sports
+```
+- Monitor logs in CloudWatch Logs for both API Gateway and ECS tasks.
+
+
+### What We Learned**
+Setting up a scalable, containerized application with ECS.
+Managing APIs securely and efficiently using API Gateway.
+Monitoring and debugging with CloudWatch Logs.
+
+### Future Enhancements**
+Add caching for frequent API requests using Amazon ElastiCache.
+Add DynamoDB to store user-specific queries and preferences.
+Secure the API Gateway using an API key or IAM-based authentication.
+Implement CI/CD for automating container deployments.
+
 
