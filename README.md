@@ -83,7 +83,7 @@ docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest
   - Image: <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest.
   - Port Mapping: 8080
 - Define environment variables:
-  - SPORTS_API_KEY: "Your Sports API key".
+  - SPORTS_API_KEY: <YOUR_SPORTSDATA.IO_API_KEY>
 3. Run the Service:
 - Go to Clusters → Create Service.
 - Launch type: Fargate.
