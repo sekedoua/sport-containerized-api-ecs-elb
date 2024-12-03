@@ -37,3 +37,25 @@ This project demonstrates building a containerized API management system for que
 ---
 
 ## **Project Structure**
+
+```bash
+sports-api-management/
+├── src/
+│ ├── app.py # Flask application for querying sports data
+├── Dockerfile # Dockerfile to containerize the Flask app
+├── requirements.txt # Python dependencies
+├── .gitignore
+└── README.md # Project documentation
+```
+
+---
+
+## **Setup Instructions**
+
+### **1. Clone the Repository**
+```bash
+git clone https://github.com/ifeanyiro9/containerized-sports-api.git
+cd containerized-sports-api
+```
+
+
