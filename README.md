@@ -19,7 +19,7 @@ This project demonstrates building a containerized API management system for que
 - **Sports API Key**: Sign up for a free account and subscription at [sportsdata.io](https://sportsdata.io).
 - **AWS Account**: With basic understanding of ECS, API Gateway, and Docker.
 - **Docker Installed**: To build and push container images.
-- **AWS CLI Installed and Configured**: To programatically interact with AWS API
+- **AWS CLI Installed and Configured**: To programatically interact with AWS
 
 ---
 
