@@ -52,10 +52,35 @@ sports-api-management/
 
 ## **Setup Instructions**
 
-### **1. Clone the Repository**
+### Clone the Repository**
 ```bash
 git clone https://github.com/ifeanyiro9/containerized-sports-api.git
 cd containerized-sports-api
 ```
 
+### Build and Push the Docker Image**
+```bash
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com
+
+docker build -t sports-api .
+docker tag sports-api:latest <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest
+docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest
+```
+
+### Set Up ECS Cluster with Fargate**
+1. Create an ECS Cluster:
+- Go to the ECS Console → Clusters → Create Cluster.
+- Select Networking Only (Fargate) and name the cluster sports-api-cluster
+
+2. Create a Task Definition:
+- Go to Task Definitions → Create New Task Definition → Fargate.
+- Add the container:
+  - Image: <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest.
+  - Port Mapping: 8080.
+- Define environment variables:
+  - SPORTS_API_KEY: "Your Sports API key".
+3. Run the Service:
+- Go to Clusters → Create Service.
+- Launch type: Fargate.
+- Assign subnets and a security group that allows inbound traffic on port 8080.
 
