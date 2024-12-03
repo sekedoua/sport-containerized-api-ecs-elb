@@ -67,7 +67,7 @@ docker tag sports-api:latest <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sp
 docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest
 ```
 
-### Set Up ECS Cluster with Fargate**
+### **Set Up ECS Cluster with Fargate**
 1. Create an ECS Cluster:
 - Go to the ECS Console → Clusters → Create Cluster.
 - Select Networking Only (Fargate) and name the cluster sports-api-cluster
@@ -85,7 +85,7 @@ docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest
 - Assign subnets and a security group that allows inbound traffic on port 8080.
 
 
-### Configure API Gateway
+### **Configure API Gateway**
 1. Create a New REST API:
 - Go to API Gateway Console → Create API → REST API.
 - Name the API (e.g., Sports API Gateway).
@@ -100,7 +100,7 @@ docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest
 - Deploy the API to a stage (e.g., prod).
 - Note the endpoint URL.
 
-### Test the System
+### **Test the System**
 - Use curl or a browser to test:
 ```bash
 curl https://<api-gateway-id>.execute-api.us-east-1.amazonaws.com/prod/sports
@@ -108,12 +108,12 @@ curl https://<api-gateway-id>.execute-api.us-east-1.amazonaws.com/prod/sports
 - Monitor logs in CloudWatch Logs for both API Gateway and ECS tasks.
 
 
-### What We Learned
+### **What We Learned**
 Setting up a scalable, containerized application with ECS.
 Managing APIs securely and efficiently using API Gateway.
 Monitoring and debugging with CloudWatch Logs.
 
-### Future Enhancements
+### **Future Enhancements**
 Add caching for frequent API requests using Amazon ElastiCache.
 Add DynamoDB to store user-specific queries and preferences.
 Secure the API Gateway using an API key or IAM-based authentication.
