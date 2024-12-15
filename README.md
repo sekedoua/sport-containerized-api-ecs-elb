@@ -67,46 +67,49 @@ aws ecr create-repository --repository-name sports-api --region us-east-1
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com
 
 docker build --platform linux/amd64 -t sports-api .
-docker tag sports-api:latest <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest
-docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest
+docker tag sports-api:latest <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:sports-api-latest
+docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:sports-api-latest
 ```
 
 ### **Set Up ECS Cluster with Fargate**
 1. Create an ECS Cluster:
 - Go to the ECS Console → Clusters → Create Cluster.
-- For Infrastructure, select Fargate and name the cluster sports-api-cluster
-- Select "Create"
+- Name your Cluster (sports-api-cluster)
+- For Infrastructure, select Fargate, then create Cluster
 
 2. Create a Task Definition:
-- Go to Task Definitions → Create New Task Definition → Fargate.
+- Go to Task Definitions → Create New Task Definition
+- Name your task definition (sports-api-task)
+- For Infrastructure, select Fargate
 - Add the container:
-  - Image: <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest.
+  - Name your container (sports-api-container)
+  - Image URI: <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:sports-api-latest.
   - Container Port: 8080
   - Protocol: TCP
   - Port Name: Leave Blank
   - App Protocol: HTTP
-- Define environment variables:
-  - SPORTS_API_KEY: <YOUR_SPORTSDATA.IO_API_KEY>
+- Define Environment Eariables:
+  - Key: SPORTS_API_KEY
+  - Value: <YOUR_SPORTSDATA.IO_API_KEY>
+  - Create task definition
 3. Run the Service with an ALB
-- Go to Clusters → Create Service.
-- Launch type: Fargate.
-- Load Balancer: Select Application Load Balancer (ALB).
+- Go to Clusters → <Name-of-Cluster> → Service → Create.
+- Capacity provider: Fargate.
+- Select Deployment configuration family (sports-api-task)
+- Name your service (sports-api-service)
+- Desired tasks: 2
+- Networking: Create new security group
+- Networking Configuration:
+  - Type: All TCP
+  - Source: Anywhere
+- Load Balancing: Select Application Load Balancer (ALB).
 - ALB Configuration:
  - Create a new ALB:
  - Name: sports-api-alb.
- - Scheme: Internet-facing.
- - Attach it to the same VPC and subnets as your ECS service.
-- Create a Target Group:
-  - Target Type: IP (for Fargate).
-  - Port: 8080 (to match your container).
-  - Register your ECS tasks in the target group.
-- Security Group:
-  - Allow inbound traffic on port 80 (for HTTP) and/or port 443 (for HTTPS if using SSL).
-- Set Auto Scaling (Optional):
-  - Configure ECS to scale tasks based on metrics like CPU or memory usage.
+ - Create service
 4. Test the ALB:
 - After deploying the ECS service, note the DNS name of the ALB (e.g., sports-api-alb-<AWS_ACCOUNT_ID>.us-east-1.elb.amazonaws.com).
-- Confirm the API is accessible by visiting the ALB DNS name in your browser
+- Confirm the API is accessible by visiting the ALB DNS name in your browser and adding /sports at end (e.g, http://sports-api-alb-<AWS_ACCOUNT_ID>.us-east-1.elb.amazonaws.com/sports).
 
 ### **Configure API Gateway**
 1. Create a New REST API:
@@ -117,7 +120,7 @@ docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest
 - Create a resource /sports.
 - Create a GET method.
 - Choose HTTP Proxy as the integration type.
-- Enter the DNS name of the ALB (ALB's public URL) of your ECS service.
+- Enter the DNS name of the ALB that includes "/sports" (e.g. http://sports-api-alb-<AWS_ACCOUNT_ID>.us-east-1.elb.amazonaws.com/sports
 
 3. Deploy the API:
 - Deploy the API to a stage (e.g., prod).
