@@ -41,8 +41,7 @@ This project demonstrates building a containerized API management system for que
 
 ```bash
 sports-api-management/
-├── src/
-│ ├── app.py # Flask application for querying sports data
+├── app.py # Flask application for querying sports data
 ├── Dockerfile # Dockerfile to containerize the Flask app
 ├── requirements.txt # Python dependencies
 ├── .gitignore
