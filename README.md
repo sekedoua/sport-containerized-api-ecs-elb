@@ -82,7 +82,10 @@ docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest
 - Go to Task Definitions → Create New Task Definition → Fargate.
 - Add the container:
   - Image: <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest.
-  - Port Mapping: 8080
+  - Container Port: 8080
+  - Protocol: TCP
+  - Port Name: Leave Blank
+  - App Protocol: HTTP
 - Define environment variables:
   - SPORTS_API_KEY: <YOUR_SPORTSDATA.IO_API_KEY>
 3. Run the Service with an ALB
