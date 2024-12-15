@@ -10,9 +10,7 @@ This project demonstrates building a containerized API management system for que
 - Runs a containerized backend using Amazon ECS with Fargate.
 - Scalable and serverless architecture.
 - API management and routing using Amazon API Gateway.
-- Monitored using Amazon CloudWatch for performance and logging.
-- Designed with **IAM least privilege** security principles.
-
+ 
 ---
 
 ## **Prerequisites**
