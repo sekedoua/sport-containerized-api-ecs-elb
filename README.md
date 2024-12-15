@@ -75,7 +75,8 @@ docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:latest
 ### **Set Up ECS Cluster with Fargate**
 1. Create an ECS Cluster:
 - Go to the ECS Console → Clusters → Create Cluster.
-- Select Networking Only (Fargate) and name the cluster sports-api-cluster
+- For Infrastructure, select Fargate and name the cluster sports-api-cluster
+- Select "Create"
 
 2. Create a Task Definition:
 - Go to Task Definitions → Create New Task Definition → Fargate.
