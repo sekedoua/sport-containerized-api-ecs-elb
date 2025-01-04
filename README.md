@@ -61,7 +61,7 @@ cd containerized-sports-api
 aws ecr create-repository --repository-name sports-api --region us-east-1
 ```
 
-### **Build and Push the Docker Image**
+### **Authenticate Build and Push the Docker Image**
 ```bash
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com
 
