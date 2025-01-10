@@ -1,11 +1,12 @@
 from flask import Flask, jsonify
 import requests
+import os
 
 app = Flask(__name__)
 
 # SerpAPI base URL and API key
 SERP_API_URL = "https://serpapi.com/search.json"
-SERP_API_KEY = "9cc616ab3c13b942874707945187f74ebdd8a59c1fc28a9c3ddb609913272d45"
+SERP_API_KEY = os.getenv("SPORTS_API_KEY")
 
 @app.route('/sports', methods=['GET'])
 def get_nfl_schedule():
