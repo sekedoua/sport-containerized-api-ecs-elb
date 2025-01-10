@@ -34,7 +34,7 @@ def format_schedule(game):
     )
     return message
 
-@app.route('/nfl-schedule', methods=['GET'])
+@app.route('/sports', methods=['GET'])
 def get_nfl_schedule():
     #Fetches the NFL schedule from SerpAPI and returns it in a formatted response.
     try:
