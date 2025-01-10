@@ -1,28 +1,62 @@
-from flask import Flask, jsonify
+from flask import Flask
 import requests
-import os
-from datetime import datetime, timedelta, timezone
 
 app = Flask(__name__)
 
-SPORTS_API_URL = "https://api.sportsdata.io/v3/nba/scores/json/GamesByDateFinal/"
-SPORTS_API_KEY = os.environ.get("SPORTS_API_KEY")
+# SerpAPI base URL and API key
+SERP_API_URL = "https://serpapi.com/search.json"
+SERP_API_KEY = "9cc616ab3c13b942874707945187f74ebdd8a59c1fc28a9c3ddb609913272d45"
 
-@app.route('/sports', methods=['GET'])
-def get_sports_data():
+def format_schedule(game):
+    #Formats the NFL game schedule into a human-readable string.
+    
+    teams = game.get("teams", [])
+    if len(teams) == 2:
+        away_team = teams[0].get("name", "Unknown")
+        home_team = teams[1].get("name", "Unknown")
+    else:
+        away_team, home_team = "Unknown", "Unknown"
+
+    venue = game.get("venue", "Unknown")
+    date = game.get("date", "Unknown")
+    time = game.get("time", "Unknown")
+
+    # Build formatted message
+    message = (
+        f"Game: {away_team} vs {home_team}\n"
+        f"Date: {date}\n"
+        f"Venue: {venue}\n"
+        f"Time: {time}\n"
+    )
+    return message
+
+@app.route('/nfl-schedule', methods=['GET'])
+def get_nfl_schedule():
+    #Fetches the NFL schedule from SerpAPI and returns it in a formatted response.
     try:
-        
-        # Get today's date dynamically in the required format (yyyy-MM-dd)
-        # Adjust for Central Time (UTC-6)
-        utc_now = datetime.now(timezone.utc)
-        central_time = utc_now - timedelta(hours=6)  # Central Time is UTC-6
-        today_date = central_time.strftime("%Y-%m-%d")
-        
-        response = requests.get(f"{SPORTS_API_URL}{today_date}", headers={"Ocp-Apim-Subscription-Key": SPORTS_API_KEY})
+        # Query SerpAPI
+        params = {
+            "engine": "google",
+            "q": "nfl schedule",
+            "api_key": SERP_API_KEY
+        }
+        response = requests.get(SERP_API_URL, params=params)
         response.raise_for_status()
-        return jsonify(response.json()), 200
+        data = response.json()
+
+        # Extract games from sports_results
+        games = data.get("sports_results", {}).get("games", [])
+        if not games:
+            return "No NFL schedule available.", 200, {'Content-Type': 'text/plain'}
+
+        # Format the schedule
+        schedule = [format_schedule(game) for game in games]
+        final_message = "\n\n---\n\n".join(schedule)
+        
+        return final_message, 200, {'Content-Type': 'text/plain'}
+    
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return f"An error occurred: {str(e)}", 500, {'Content-Type': 'text/plain'}
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
