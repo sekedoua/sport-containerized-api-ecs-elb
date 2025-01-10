@@ -21,6 +21,10 @@ def format_schedule(game):
     date = game.get("date", "Unknown")
     time = game.get("time", "Unknown")
 
+    # Add "ET" to the time if it's not "Unknown"
+    if time != "Unknown":
+        time = f"{time} ET"
+
     # Build formatted message
     message = (
         f"Game: {away_team} vs {home_team}\n"
