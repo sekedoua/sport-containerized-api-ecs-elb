@@ -93,7 +93,7 @@ docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:sports-a
   - Value: <YOUR_SPORTSDATA.IO_API_KEY>
   - Create task definition
 3. Run the Service with an ALB
-- Go to Clusters → <Name-of-Cluster> → Service → Create.
+- Go to Clusters → Select Cluster → Service → Create.
 - Capacity provider: Fargate.
 - Select Deployment configuration family (sports-api-task)
 - Name your service (sports-api-service)
