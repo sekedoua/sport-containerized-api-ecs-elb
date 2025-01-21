@@ -14,11 +14,11 @@ This project demonstrates building a containerized API management system for que
 ---
 
 ## **Prerequisites**
-- **Sports API Key**: Sign up for a free account and subscription and obtain your API Key at serpapi.com
-- **AWS Account**: Create an AWS Account and have basic understanding of ECS, API Gateway, Docker and Python
-- **AWS CLI Installed and Configured**: Install and configure AWS CLI to programatically interact with AWS
+- **Sports API Key**: Sign up for a free account and subscription & obtain your API Key at serpapi.com
+- **AWS Account**: Create an AWS Account & have basic understanding of ECS, API Gateway, Docker & Python
+- **AWS CLI Installed and Configured**: Install & configure AWS CLI to programatically interact with AWS
 - **Serpapi Library**: Install Serpapi library in local environment "pip install google-search-results"
-- **Docker CLI and Desktop Installed**: To build and push container images
+- **Docker CLI and Desktop Installed**: To build & push container images
 
 ---
 
