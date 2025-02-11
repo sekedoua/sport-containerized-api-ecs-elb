@@ -1,7 +1,7 @@
-# Sports API Management System
+# Système de gestion des API sportives
 
-## **Project Overview**
-This project demonstrates building a containerized API management system for querying sports data. It leverages **Amazon ECS (Fargate)** for running containers, **Amazon API Gateway** for exposing REST endpoints, and an external **Sports API** for real-time sports data. The project showcases advanced cloud computing practices, including API management, container orchestration, and secure AWS integrations.
+## **Présentation du projet**
+Ce projet illustre la création d'un système de gestion des API conteneurisé pour l'interrogation des données sportives. Il exploite **Amazon ECS (Fargate)** pour l'exécution des conteneurs, **Amazon API Gateway** pour l'exposition des points de terminaison REST et une **API sportive** externe pour les données sportives en temps réel. Le projet présente des pratiques avancées de cloud computing, notamment la gestion des API, l'orchestration des conteneurs et les intégrations AWS sécurisées.
 
 ---
 
