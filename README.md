@@ -13,26 +13,26 @@ Ce projet illustre la création d'un système de gestion des API conteneurisé p
  
 ---
 
-## **Prerequisites**
-- **Sports API Key**: Sign up for a free account and subscription & obtain your API Key at serpapi.com
-- **AWS Account**: Create an AWS Account & have basic understanding of ECS, API Gateway, Docker & Python
-- **AWS CLI Installed and Configured**: Install & configure AWS CLI to programatically interact with AWS
-- **Serpapi Library**: Install Serpapi library in local environment "pip install google-search-results"
-- **Docker CLI and Desktop Installed**: To build & push container images
+## **Prérequis**
+- **Clé API Sports** : créez un compte et un abonnement gratuits et obtenez votre clé API sur serpapi.com
+- **Compte AWS** : créez un compte AWS et ayez une compréhension de base d'ECS, API Gateway, Docker et Python
+- **AWS CLI installé et configuré** : installez et configurez AWS CLI pour interagir par programmation avec AWS
+- **Bibliothèque Serpapi** : installez la bibliothèque Serpapi dans l'environnement local « pip install google-search-results »
+- **Docker CLI et Desktop installés** : pour créer et envoyer des images de conteneur
 
 ---
 
 ## **Technical Architecture**
-![Brown Minimalist Lifestyle Daily Vlog YouTube Thumbnail (2)](https://github.com/user-attachments/assets/32e49fe6-df16-40cb-b262-af1478cf01d5)
+![ Diagramme Principale](/img/Diagramme%20sans%20nom.jpg)
 
 ---
 
 ## **Technologies**
-- **Cloud Provider**: AWS
-- **Core Services**: Amazon ECS (Fargate), API Gateway, CloudWatch
-- **Programming Language**: Python 3.x
-- **Containerization**: Docker
-- **IAM Security**: Custom least privilege policies for ECS task execution and API Gateway
+- **Fournisseur de cloud** : AWS
+- **Services de base** : Amazon ECS (Fargate), API Gateway, CloudWatch
+- **Langage de programmation** : Python 3.x
+- **Conteneurisation** : Docker
+- **Sécurité IAM** : Politiques de moindre privilège personnalisées pour l'exécution des tâches ECS et API Gateway
 
 ---
 
@@ -40,106 +40,114 @@ Ce projet illustre la création d'un système de gestion des API conteneurisé p
 
 ```bash
 sports-api-management/
-├── app.py # Flask application for querying sports data
-├── Dockerfile # Dockerfile to containerize the Flask app
-├── requirements.txt # Python dependencies
+├── app.py # Application Flask pour interroger les données sportives
+├── Dockerfile # Dockerfile pour conteneuriser l'application Flask
+├── requirements.txt # Dépendances Python
 ├── .gitignore
-└── README.md # Project documentation
+├── /img 
+└── README.md # Documentation du projet
 ```
 
 ---
 
-## **Setup Instructions**
+## **Instructions d'installation**
 
-### **Clone the Repository**
+### **Cloner repo**
 ```bash
-git clone https://github.com/ifeanyiro9/containerized-sports-api.git
-cd containerized-sports-api
+git clone  https://github.com/sekedoua/sport-containerized-api-ecs-elb.git
+cd sport-containerized-api-ecs-elb
 ```
-### **Create ECR Repo**
+### **Créer un dépôt ECR (Repository) **
 ```bash
-aws ecr create-repository --repository-name sports-api --region us-east-1
+aws ecr create-repository --repository-name sports-api --region eu-west-3
 ```
 
-### **Authenticate Build and Push the Docker Image**
+### **Authentifier, construire et envoyer l'image Docker**
 ```bash
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com
+aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin <AWS_ACCOUNT_ID>.dkr.ecr.eu-west-3.amazonaws.com
+![ Docker Part](/img/Capture_Login.PNG)
 
 docker build --platform linux/amd64 -t sports-api .
-docker tag sports-api:latest <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:sports-api-latest
-docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:sports-api-latest
+docker tag sports-api:latest <AWS_ACCOUNT_ID>.dkr.ecr.eu-west-3.amazonaws.com/sports-api:sports-api-latest
+docker push <AWS_ACCOUNT_ID>.dkr.ecr.eu-west-3.amazonaws.com/sports-api:sports-api-latest
 ```
+![ Docker Part](/img/dockerBuild_ag_push.PNG)
 
-### **Set Up ECS Cluster with Fargate**
-1. Create an ECS Cluster:
-- Go to the ECS Console → Clusters → Create Cluster
-- Name your Cluster (sports-api-cluster)
-- For Infrastructure, select Fargate, then create Cluster
+### **Configurer le cluster ECS avec Fargate**
+1. Créer un cluster ECS :
+- Accédez à la console ECS → Clusters → Créer un cluster
+- Nommez votre cluster (sports-api-cluster)
+- Pour Infrastructure, sélectionnez Fargate, puis créez un cluster
 
-2. Create a Task Definition:
-- Go to Task Definitions → Create New Task Definition
-- Name your task definition (sports-api-task)
-- For Infrastructure, select Fargate
-- Add the container:
-  - Name your container (sports-api-container)
-  - Image URI: <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/sports-api:sports-api-latest
-  - Container Port: 8080
-  - Protocol: TCP
-  - Port Name: Leave Blank
-  - App Protocol: HTTP
-- Define Environment Eariables:
-  - Key: SPORTS_API_KEY
-  - Value: <YOUR_SPORTSDATA.IO_API_KEY>
-  - Create task definition
-3. Run the Service with an ALB
-- Go to Clusters → Select Cluster → Service → Create.
-- Capacity provider: Fargate
-- Select Deployment configuration family (sports-api-task)
-- Name your service (sports-api-service)
-- Desired tasks: 2
-- Networking: Create new security group
-- Networking Configuration:
-  - Type: All TCP
-  - Source: Anywhere
-- Load Balancing: Select Application Load Balancer (ALB).
-- ALB Configuration:
- - Create a new ALB:
- - Name: sports-api-alb
- - Target Group health check path: "/sports"
- - Create service
+2. Créer une définition de tâche :
+- Accédez à Définitions de tâches → Créer une nouvelle définition de tâche
+- Nommez votre définition de tâche (sports-api-task)
+- Pour Infrastructure, sélectionnez Fargate
+- Ajoutez le conteneur :
+- Nommez votre conteneur (sports-api-container)
+- URI de l'image : <AWS_ACCOUNT_ID>.dkr.ecr.eu-west-3.amazonaws.com/sports-api:sports-api-latest
+- Port du conteneur : 8080
+- Protocole : TCP
+- Nom du port : laissez vide
+- Protocole d'application : HTTP
+- Définir les Eariables d'environnement :
+- Clé : SPORTS_API_KEY
+- Valeur : <VOTRE_SPORTSDATA.IO_API_KEY>
+- Créer une définition de tâche
+3. Exécuter le service avec un ALB
+- Accédez à Clusters → Sélectionner Cluster → Service → Créer.
+- Fournisseur de capacité : Fargate
+- Sélectionnez la famille de configuration de déploiement (sports-api-task)
+- Nommez votre service (sports-api-service)
+- Tâches souhaitées : 2
+- Réseau : Créer un nouveau groupe de sécurité
+- Configuration réseau :
+- Type : Tout TCP
+- Source : N'importe où
+- Équilibrage de charge : Sélectionner Application Load Balancer (ALB).
+- Configuration ALB :
+- Créer un nouvel ALB :
+- Nom : sports-api-alb
+- Chemin de vérification de l'état du groupe cible : "/sports"
+- Créer un service
 4. Test the ALB:
-- After deploying the ECS service, note the DNS name of the ALB (e.g., sports-api-alb-<AWS_ACCOUNT_ID>.us-east-1.elb.amazonaws.com)
-- Confirm the API is accessible by visiting the ALB DNS name in your browser and adding /sports at end (e.g, http://sports-api-alb-<AWS_ACCOUNT_ID>.us-east-1.elb.amazonaws.com/sports)
+- Après avoir déployé le service ECS, notez le nom DNS de l'ALB (par exemple, sports-api-alb-<AWS_ACCOUNT_ID>.eu-west-3.elb.amazonaws.com)
+- Confirmez que l'API est accessible en visitant le nom DNS de l'ALB dans votre navigateur et en ajoutant /sports à la fin (par exemple, http://sports-api-alb-<AWS_ACCOUNT_ID>.eu-west-3.elb.amazonaws.com/sports)
 
-### **Configure API Gateway**
-1. Create a New REST API:
-- Go to API Gateway Console → Create API → REST API
-- Name the API (e.g., Sports API Gateway)
+![ Docker Part](/img/Service_OK.PNG)
 
-2. Set Up Integration:
-- Create a resource /sports
-- Create a GET method
-- Choose HTTP Proxy as the integration type
-- Enter the DNS name of the ALB that includes "/sports" (e.g. http://sports-api-alb-<AWS_ACCOUNT_ID>.us-east-1.elb.amazonaws.com/sports
+### **Configurer la passerelle API**
+1. Créer une nouvelle API REST :
+- Accédez à la console de la passerelle API → Créer une API → API REST
+- Nommez l'API (par exemple, Passerelle API Sports)
 
-3. Deploy the API:
-- Deploy the API to a stage (e.g., prod)
-- Note the endpoint URL
+2. Configurer l'intégration :
+- Créez une ressource /sports
+- Créez une méthode GET
+- Choisissez Proxy HTTP comme type d'intégration
+- Saisissez le nom DNS de l'ALB qui inclut « /sports » (par exemple, http://sports-api-alb-<AWS_ACCOUNT_ID>.eu-west-3.elb.amazonaws.com/sports
 
-### **Test the System**
-- Use curl or a browser to test:
+![ Docker Part](/img/API_GatewayOK.PNG)
+
+
+3. Déployez l'API :
+- Déployez l'API sur une étape (par exemple, prod)
+- Notez l'URL du point de terminaison
+
+### **Tester le système**
+- Utilisez curl ou un navigateur pour tester :
 ```bash
-curl https://<api-gateway-id>.execute-api.us-east-1.amazonaws.com/prod/sports
+curl https://<api-gateway-id>.execute-api.eu-west-3.amazonaws.com/prod/sports
 ```
 
-### **What We Learned**
-Setting up a scalable, containerized application with ECS
-Creating public APIs using API Gateway.
 
-### **Future Enhancements**
-Add caching for frequent API requests using Amazon ElastiCache
-Add DynamoDB to store user-specific queries and preferences
-Secure the API Gateway using an API key or IAM-based authentication
-Implement CI/CD for automating container deployments
+### **Ce que nous avons appris**
+Configuration d'une application évolutive et conteneurisée avec ECS
+Création d'API publiques à l'aide d'API Gateway.
 
+### **Améliorations futures**
+Ajoutez la mise en cache pour les requêtes API fréquentes à l'aide d'Amazon ElastiCache
+Ajoutez DynamoDB pour stocker les requêtes et préférences spécifiques à l'utilisateur
+Sécurisez la passerelle API à l'aide d'une clé API ou d'une authentification basée sur IAM
+Implémentez CI/CD pour automatiser les déploiements de conteneurs
 
